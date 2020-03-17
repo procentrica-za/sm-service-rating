@@ -11,7 +11,7 @@ import (
 
 func (s *Server) handleratebuyer() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("handleaddchat Has Been Called!")
+		fmt.Println("handleratebuyer Has Been Called!")
 		//get JSON payload
 
 		startrating := StartRating{}
@@ -29,7 +29,7 @@ func (s *Server) handleratebuyer() http.HandlerFunc {
 		requestByte, _ := json.Marshal(startrating)
 
 		//post to crud service
-		req, respErr := http.Post("http://"+config.CRUDHost+":"+config.CRUDPort+"/rating", "application/json", bytes.NewBuffer(requestByte))
+		req, respErr := http.Post("http://"+config.CRUDHost+":"+config.CRUDPort+"/rate", "application/json", bytes.NewBuffer(requestByte))
 
 		//check for response error of 500
 		if respErr != nil {
@@ -80,6 +80,68 @@ func (s *Server) handleratebuyer() http.HandlerFunc {
 		}
 
 		//return success back to Front-End user
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		w.Write(js)
+	}
+}
+
+func (s *Server) handlerateseller() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//get JSON payload
+		rateSeller := RateSeller{}
+		err := json.NewDecoder(r.Body).Decode(&rateSeller)
+
+		//handle for bad JSON provided
+		if err != nil {
+			w.WriteHeader(500)
+			fmt.Fprint(w, err.Error())
+			return
+		}
+
+		client := &http.Client{}
+
+		//create byte array from JSON payload
+		requestByte, _ := json.Marshal(rateSeller)
+
+		//put to crud service
+		req, err := http.NewRequest("PUT", "http://"+config.CRUDHost+":"+config.CRUDPort+"/rate", bytes.NewBuffer(requestByte))
+		if err != nil {
+			fmt.Fprint(w, err.Error())
+			fmt.Println("Error in communication with CRUD service endpoint for request to rate seller")
+			return
+		}
+
+		// Fetch Request
+		resp, err := client.Do(req)
+		if err != nil {
+			fmt.Fprint(w, err.Error())
+			return
+		}
+
+		//close the request
+		defer resp.Body.Close()
+
+		//create new response struct
+		var ratesellerResponse RateSellerResult
+		decoder := json.NewDecoder(resp.Body)
+		err = decoder.Decode(&ratesellerResponse)
+		if err != nil {
+			w.WriteHeader(500)
+			fmt.Fprint(w, err.Error())
+			return
+		}
+
+		//convert struct back to JSON
+		js, jserr := json.Marshal(ratesellerResponse)
+		if jserr != nil {
+			w.WriteHeader(500)
+			fmt.Fprint(w, jserr.Error())
+			fmt.Println("Error occured when trying to marshal the response to rate seller")
+			return
+		}
+
+		//return back to Front-End user
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		w.Write(js)

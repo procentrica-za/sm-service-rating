@@ -7,7 +7,7 @@ type StartRating struct {
 	AdvertisementID string `json:"advertisementid"`
 	SellerID        string `json:"sellerid"`
 	BuyerID         string `json:"buyerid"`
-	BuyerRating     string `json:"buyerating"`
+	BuyerRating     string `json:"buyerrating"`
 	BuyerComments   string `json:"buyercomments"`
 }
 
@@ -15,6 +15,17 @@ type StartRatingResult struct {
 	BuyerRated      bool   `json:"buyerrated"`
 	AdvertisementID string `json:"advertisementid"`
 	Message         string `json:"message"`
+}
+
+type RateSeller struct {
+	AdvertisementID string `json:"advertisementid"`
+	SellerRating    string `json:"sellerrating"`
+	SellerComments  string `json:"sellercomments"`
+}
+
+type RateSellerResult struct {
+	SellerRated bool   `json:"sellerrated"`
+	Message     string `json:"message"`
 }
 
 //touter service struct
