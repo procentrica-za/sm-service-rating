@@ -40,6 +40,17 @@ type OutstandingRatingList struct {
 	Oustandingratings []GetOutstandingResult `json:"outstandingratings"`
 }
 
+type GetPreviousResult struct {
+	RatingID string `json:"ratingid"`
+	UserName string `json:"username"`
+	Rating   string `json:"rating"`
+	Comment  string `json:"comment"`
+}
+
+type PreviousRatingList struct {
+	Previousratings []GetPreviousResult `json:"previousratings"`
+}
+
 //touter service struct
 type Server struct {
 	router *mux.Router
