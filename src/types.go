@@ -3,53 +3,41 @@ package main
 import "github.com/gorilla/mux"
 
 //create structs for JSON objects recieved and responses
-type StartChat struct {
+type StartRating struct {
+	AdvertisementID string `json:"advertisementid"`
 	SellerID        string `json:"sellerid"`
 	BuyerID         string `json:"buyerid"`
-	AdvertisementID string `json:"advertisementid"`
+	BuyerRating     string `json:"buyerrating"`
+	BuyerComments   string `json:"buyercomments"`
 }
 
-type StartChatResult struct {
-	ChatPosted bool   `json:"chatposted"`
-	ChatID     string `json:"chatid"`
+type StartRatingResult struct {
+	BuyerRated bool   `json:"buyerrated"`
+	RatingID   string `json:"ratingid"`
 	Message    string `json:"message"`
 }
 
-type ChatID struct {
-	ChatID string `json:"id"`
+type RateSeller struct {
+	RatingID       string `json:"ratingid"`
+	SellerRating   string `json:"sellerrating"`
+	SellerComments string `json:"sellercomments"`
 }
 
-type DeleteChatResult struct {
-	ChatDeleted bool   `json:"chatposted"`
+type RateSellerResult struct {
+	SellerRated bool   `json:"sellerrated"`
 	Message     string `json:"message"`
 }
 
-type GetActiveChatResult struct {
-	ChatID      string `json:"chatid"`
+type GetOutstandingResult struct {
+	RatingID    string `json:"ratingid"`
 	UserName    string `json:"username"`
-	Message     string `json:"message"`
-	MessageDate string `json:"messagedate"`
+	Price       string `json:"price"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }
 
-type ActiveChatList struct {
-	ActiveChats []GetActiveChatResult `json:"activechats"`
-}
-
-type GetMessageResult struct {
-	MessageID   string `json:"messageid"`
-	UserName    string `json:"username"`
-	Message     string `json:"message"`
-	MessageDate string `json:"messagedate"`
-}
-
-type MessageList struct {
-	Messages []GetMessageResult `json:"messages"`
-}
-
-type SendMessage struct {
-	ChatID   string `json:"chatid"`
-	AuthorID string `json:"authorid"`
-	Message  string `json:"message"`
+type OutstandingRatingList struct {
+	Oustandingratings []GetOutstandingResult `json:"outstandingratings"`
 }
 
 //touter service struct
