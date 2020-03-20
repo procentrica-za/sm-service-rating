@@ -56,7 +56,7 @@ type InterestedBuyers struct {
 	AdvertisementID string `json:"advertisementid"`
 }
 
-type GetInterestedResult struct {
+type GetInterestedBuyersResult struct {
 	UserName        string `json:"username"`
 	AdvertisementID string `json:"advertisementid"`
 	SellerID        string `json:"sellerid"`
@@ -64,7 +64,7 @@ type GetInterestedResult struct {
 }
 
 type InterestedRatingList struct {
-	Interestedratings []GetInterestedResult `json:"interestedbuyers"`
+	Interestedbuyers []GetInterestedBuyersResult `json:"interestedbuyers"`
 }
 
 //touter service struct

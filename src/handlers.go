@@ -409,7 +409,7 @@ func (s *Server) handlegetinterestedbuyers() http.HandlerFunc {
 
 		//create new response struct for JSON list
 		interestedRatingList := InterestedRatingList{}
-		interestedRatingList.Interestedratings = []GetInterestedResult{}
+		interestedRatingList.Interestedbuyers = []GetInterestedBuyersResult{}
 
 		//decode request into decoder which converts to the struct
 		decoder := json.NewDecoder(req.Body)
