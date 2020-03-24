@@ -57,10 +57,11 @@ type InterestedBuyers struct {
 }
 
 type GetInterestedBuyersResult struct {
-	UserName        string `json:"username"`
-	AdvertisementID string `json:"advertisementid"`
-	SellerID        string `json:"sellerid"`
-	BuyerID         string `json:"buyerid"`
+	UserName          string `json:"username"`
+	AdvertisementID   string `json:"advertisementid"`
+	AdvertisementType string `json:"advertisementtype"`
+	SellerID          string `json:"sellerid"`
+	BuyerID           string `json:"buyerid"`
 }
 
 type InterestedRatingList struct {
