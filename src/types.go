@@ -40,6 +40,10 @@ type OutstandingRatingList struct {
 	Oustandingratings []GetOutstandingResult `json:"outstandingratings"`
 }
 
+type OutstandingRatingResult struct {
+	OutstandingRatings bool `json:"outstandingratings"`
+}
+
 type GetPreviousResult struct {
 	RatingID string `json:"ratingid"`
 	UserName string `json:"username"`

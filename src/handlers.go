@@ -435,3 +435,71 @@ func (s *Server) handlegetinterestedbuyers() http.HandlerFunc {
 		w.Write(js)
 	}
 }
+
+func (s *Server) handlegetratingstodo() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//get userID from url
+		userid := r.URL.Query().Get("userid")
+		if userid == "" {
+			w.WriteHeader(500)
+			fmt.Fprint(w, "UserID not properly provided in URL")
+			fmt.Println("UserID not properly provided in URL")
+			return
+		}
+
+		//get userID from crud service
+		req, respErr := http.Get("http://" + config.CRUDHost + ":" + config.CRUDPort + "/rating?userid=" + userid)
+
+		//check for response error of 500
+		if respErr != nil {
+			w.WriteHeader(500)
+			fmt.Fprint(w, respErr.Error())
+			fmt.Println("Error in communication with CRUD service endpoint for request to retrieve outstanding ratings")
+			return
+		}
+		if req.StatusCode != 200 {
+			w.WriteHeader(500)
+			fmt.Fprint(w, "Request to DB can't be completed...")
+			fmt.Println("Request to DB can't be completed...")
+		}
+		if req.StatusCode == 500 {
+			w.WriteHeader(500)
+			bodyBytes, err := ioutil.ReadAll(req.Body)
+			if err != nil {
+				log.Fatal(err)
+			}
+			bodyString := string(bodyBytes)
+			fmt.Fprintf(w, "An internal error has occured whilst trying to get outstanding ratings"+bodyString)
+			fmt.Println("An internal error has occured whilst trying to get outstanding ratings" + bodyString)
+			return
+		}
+
+		//close the request
+		defer req.Body.Close()
+
+		//create new response struct
+		var getResponse OutstandingRatingResult
+		decoder := json.NewDecoder(req.Body)
+		err := decoder.Decode(&getResponse)
+		if err != nil {
+			w.WriteHeader(500)
+			fmt.Fprint(w, err.Error())
+			fmt.Println("An internal error has occured whilst trying to decode the get outstanding ratings")
+			return
+		}
+
+		//convert struct back to JSON
+		js, jserr := json.Marshal(getResponse)
+		if jserr != nil {
+			w.WriteHeader(500)
+			fmt.Fprint(w, jserr.Error())
+			fmt.Println("Error occured when trying to marshal the response to get outstanding ratings")
+			return
+		}
+
+		//return back to Front-End user
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		w.Write(js)
+	}
+}
