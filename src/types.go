@@ -72,6 +72,10 @@ type InterestedRatingList struct {
 	Interestedbuyers []GetInterestedBuyersResult `json:"interestedbuyers"`
 }
 
+type AverageResult struct {
+	AverageBuying string `json:"average"`
+}
+
 //touter service struct
 type Server struct {
 	router *mux.Router
