@@ -624,7 +624,7 @@ func (s *Server) handlegetsellerdashboard() http.HandlerFunc {
 			return
 		}
 
-		//convert struct back to JSON
+		//convert struct back to JSON.
 		js, jserr := json.Marshal(getResponse)
 		if jserr != nil {
 			w.WriteHeader(500)
